@@ -1,0 +1,281 @@
+﻿@using Web.Models
+@model TicketsHeaderViewModel
+@{
+    var chips = new List<string> {
+"sort_chip",
+"filter_keyword_chip",
+"filter_assignedto_chip",
+"filter_createdby_chip",
+"filter_reportedby_chip",
+"filter_priority_chip"
+};
+}
+
+<nav class="table-header container-fluid p-2 border border-secondary">
+    <div class="d-flex justify-content-start align-items-center">
+        <div class="d-flex flex-wrap chip-container" style="overflow-x:auto; max-height:120px;">
+            @foreach (var chip in chips)
+            {
+                <div id="@chip" class="chip btn btn-light btn-sm w-auto rounded-0 py-2 mb-1 px-3 mr-2 d-none">
+                    <small class="chip-text font-italic">
+                    </small>
+                    <a class="position-relative chip-close" style="right:-2px;top:-2px; z-index:2" title="remove"><i class="fas fa-times"></i></a>
+                </div>
+            }
+
+        </div>
+        <!--filter-->
+        <button type="button" class="btn btn-link ml-auto pb-0" data-target="#filterCollapse" data-toggle="collapse"><i class="material-icons">tune</i></button>
+    </div>
+    <cache>
+
+        <div class="collapse" id="filterCollapse">
+            <button type="button" class="btn btn-link ml-auto pb-0 float-right  d-block d-sm-none" data-target="#filterCollapse" data-toggle="collapse"><i class="fas fa-times"></i></button>
+            <div class="container-fluid">
+                <hr class="d-none d-sm-block" />
+                <div>
+                    <!--
+
+                    <div class="m-1 mt-sm-2">
+                        <div class="d-flex flex-wrap">
+                            <div class="mr-2  align-self-center">
+                                <label class="text-muted text-uppercase mt-2 mb-0">Sort</label>
+                                <div class="btn-group-primary btn-group-toggle" data-toggle="button">
+                                    @foreach (var item in Model.PropertySort)
+                                    {
+                                        <label class="btn btn-secondary btn-xs mb-1">
+                                            <input form="form_filter" type="radio" asp-for="Filter.Sort" value="@item" autocomplete="off">@item
+                                        </label>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="align-self-cente ml-md-2">
+                                <label class="text-muted text-uppercase mt-2 mb-0">Sort Order</label>
+                                <div class="btn-group-primary btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-secondary btn-xs mb-1">
+                                        <input form="form_filter" type="radio" asp-for="Filter.SortOrder" value="Ascending" autocomplete="off">Ascending
+                                    </label>
+                                    <label class="btn btn-secondary btn-xs mb-1">
+                                        <input form="form_filter" type="radio" asp-for="Filter.SortOrder" value="Descending" autocomplete="off">Descending
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    -->
+                    <div class="m-1 d-block">
+                        <label class="text-muted text-uppercase mt-2 mb-0">Filter</label>
+                        <div class="d-flex flex-wrap">
+                            @if (Model.CreatedBy.Any())
+                            {
+                                <div class="form-group mr-2">
+                                    <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.CreatedBy"></label>
+                                    <select form="form_filter" class="form-control" asp-items="@Model.CreatedBy" asp-for="@Model.Filter.CreatedById"></select>
+                                </div>
+                            }
+                            @if (Model.AssignedTo.Any())
+                            {
+                                <div class="form-group mr-2">
+                                    <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.AssignedTo"></label>
+                                    <select form="form_filter" class="form-control" asp-items="@Model.AssignedTo" asp-for="@Model.Filter.AssignedToId"></select>
+                                </div>
+                            }
+                            @if (Model.ReportedBy.Any())
+                            {
+                                <div class="form-group mr-2">
+                                    <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.ReportedBy"></label>
+                                    <select form="form_filter" class="form-control" asp-items="@Model.ReportedBy" asp-for="@Model.Filter.ReportedBy"></select>
+                                </div>
+                            }
+                            @if (Model.Priorities.Any())
+                            {
+
+                                <div class="form-group mr-2">
+                                    <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.Priorities"></label>
+                                    <select form="form_filter" class="form-control" asp-items="@Model.Priorities" asp-for="@Model.Filter.PriorityId">
+                                        <option value="0">All</option>
+                                    </select>
+                                </div>
+                            }
+
+                            <div class="form-group col-sm-12">
+                                <label class="text-muted text-uppercase mt-2 mb-0">Search</label> <span class="text-dark" data-toggle="tooltip" title="You can enter multiple keywords separated by comma."><i class="fas fa-question-circle"></i></span>
+
+                                <div class="input-group mb-3">
+
+                                    <input form="form_filter" class="search-sm form-control w-100 mr-5 rounded-0 border-top-0 border-left-0 border-right-0 border-bottom" type="text" placeholder="Enter keywords." asp-for="@Model.Filter.Keyword" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid bg-white border-top border-secondary">
+                    <form id="form_filter" class="d-flex py-2 justify-content-between" method="get">
+                        <div class="ml-auto">
+                            <button type="reset" class="filter-reset-button btn btn-link bt-sm rounded-0 m-1">Clear</button>
+                            <button type="button" class="filter-button btn btn-primary rounded-0 btn-sm m-1">Update</button>
+                        </div>
+                    </form>
+                    <script>
+                        $(function () {
+
+                            $("#filterCollapse").on('hidden.bs.collapse', function () {
+                                $('.chip-container .chip').removeClass('hidden');
+
+                            });
+                            $("#filterCollapse").on('shown.bs.collapse', function () {
+                                $('.chip-container .chip').addClass('hidden');
+
+                            });
+
+                            $(".filter-button").on('click', function () {
+
+                                //hide filter
+                                $('#filterCollapse').collapse('hide');
+                                $('.ticket-detail').collapse('hide');
+
+
+                                //update chips
+                                var data = $('#form_filter').serialize();
+                                $.ajax({
+                                    url: '/Tickets?handler=Body',
+                                    type: 'GET',
+                                    async: true,
+                                    data: data,
+
+                                }).done(function (result) {
+                                    $('.table-body').html(result);
+                                });
+                            });
+
+                            //keyword
+                            $('#Filter_Keyword').on('change keyup paste', function () {
+                                var inputval = $(this).val();
+                                if (inputval.val().length && inputval != undefined && inputval != null) {
+                                    $('#filter_keyword_chip .chip-text').text('Keywords -' + inputval);
+                                    $('#filter_keyword_chip').removeClass('d-none');
+                                }
+                            });
+
+
+                            $("#filter_keyword_chip .chip-close").on('click', function () {
+                                $("#filter_assignedto_chip").addClass('d-none');
+                                $('#Filter_Keyword').val('');
+
+                                $('.filter-button').click();
+                            });
+
+                            //filter_assignedto
+                            $('#Filter_AssignedToId').on('change', function () {
+
+                                var inputval = $(this).val();
+                                if (inputval != '0' || inputval != 0) {
+
+                                    var text = $(this).find('option:selected').text();
+
+                                    $('#filter_assignedto_chip .chip-text').text('Assigned To - ' + text);
+                                    $('#filter_assignedto_chip').removeClass('d-none');
+                                }
+                                else {
+                                    $('#filter_assignedto_chip').addClass('d-none');
+
+                                }
+                            });
+
+
+                            $("#filter_assignedto_chip .chip-close").on('click', function () {
+                                $("#filter_assignedto_chip").addClass('d-none');
+                                $('#Filter_AssignedToId').val('0');
+
+                                $('.filter-button').click();
+                            });
+
+                            //filter_createdby
+                            $('#Filter_CreatedById').on('change', function () {
+
+                                var inputval = $(this).val();
+                                if (inputval != '0' || inputval != 0) {
+                                    var text = $(this).find('option:selected').text();
+                                    $('#filter_createdby_chip .chip-text').text('Created By - ' + text);
+                                    $('#filter_createdby_chip').removeClass('d-none');
+                                }
+                                else {
+
+                                    $('#filter_createdby_chip').addClass('d-none');
+                                }
+                            });
+
+
+                            $("#filter_createdby_chip .chip-close").on('click', function () {
+                                $("#filter_createdby_chip").addClass('d-none');
+                                $('#Filter_CreatedById').val('0');
+
+                                $('.filter-button').click();
+                            });
+
+                            $('#Filter_ReportedBy').on('change', function () {
+
+                                var inputval = $(this).val();
+                                if (inputval != '0' || inputval != 0) {
+                                    $('#filter_reportedby_chip .chip-text').text('Reported By - ' + inputval);
+                                    $('#filter_reportedby_chip').removeClass('d-none');
+                                }
+                                else {
+                                    $('#filter_reportedby_chip').addClass('d-none');
+
+                                }
+                            });
+
+                            $("#filter_reportedby_chip .chip-close").on('click', function () {
+                                $("#filter_reportedby_chip").addClass('d-none');
+                                $('#Filter_ReportedBy').val('0');
+
+                                $('.filter-button').click();
+                            });
+
+                            $('#Filter_PriorityId').on('change', function () {
+
+                                var inputval = $(this).val();
+                                if (inputval != '0' || inputval != 0) {
+                                    $('#filter_priority_chip .chip-text').text('Priority - ' + inputval);
+                                    $('#filter_priority_chip').removeClass('d-none');
+                                }
+                                else {
+                                    $('#filter_priority_chip').addClass('d-none');
+
+                                }
+                            });
+
+                            $("#filter_priority_chip .chip-close").on('click', function () {
+                                $("#filter_priority_chip").addClass('d-none');
+                                $('#Filter_PriorityId').val('0');
+                                $('.filter-button').click();
+                            });
+
+                            $('.filter-reset-button').on('click', function () {
+                                $('.chip-container').children('[id*="chip"]').each(function () {
+                                    if (!$(this).hasClass('d-none')) {
+                                        $(this).addClass('d-none')
+                                    }
+                                    $(this).find('chip-text').text('');
+                                });
+                                var data = $('#form_filter').serialize();
+                                $.ajax({
+                                    url: '/Tickets?handler=Body',
+                                    type: 'GET',
+                                    async: true,
+                                    data: null,
+
+                                }).done(function (result) {
+                                    $('.table-body').html(result);
+                                });
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </cache>
+</nav>

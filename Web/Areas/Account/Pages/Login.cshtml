@@ -1,0 +1,47 @@
+﻿@page
+@model Web.Areas.Account.Pages.LoginModel
+@{
+    Layout = "_Layout";
+
+    ViewData["Title"] = "Login";
+
+
+}
+<div class="d-flex  min-vh-100 bg-primary min-vw-100 align-items-center">
+    <div class="h-100 w-100 ">
+        <section class="row row-eq-height justify-content-center align-items-center h-100 w-100 pb-5">
+            <div class="col-sm-12 col-md-4 text-center">
+                <h1 class="display-4 text-white">Fresenius Medical Care</h1>
+                <hr class="w-50  bg-white d-block" />
+                <h1 class="font-weight-bold text-hero">Ticketing Management System</h1>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <form class=" container p-3 shadow bg-white" method="post" style="max-width:500px;">
+                    <h1 class="text-center mb-3">Login</h1>
+                    @if (Model.HasErrors)
+                    {
+
+                        <div class="alert text-danger text-uppercase"><strong>Invalid Login!</strong> Please try again.</div>
+                    }
+                    <div class="form-group">
+                        <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.Login.Username"></label>
+                        <input class="form-control" asp-for="@Model.Login.Username">
+                    </div>
+                    <div class="form-group">
+                        <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.Login.Password"></label>
+                        <input class="form-control" asp-for="@Model.Login.Password">
+                    </div>
+                    <div class="my-2">
+                        <div class="d-flex py-2 justify-content-between">
+                            <div class="ml-auto">
+                                <button class="btn btn-secondary rounded-0" type="reset">Clear</button>
+                                <button class="btn btn-hero rounded-0 btn-sm" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+</div>

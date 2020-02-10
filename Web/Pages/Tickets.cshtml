@@ -1,0 +1,54 @@
+﻿@page
+
+@model Web.Pages.TicketsModel
+@{
+    ViewData["Title"] = ViewData["Page"] = "Tickets";
+
+}
+
+<div class="container-fluid">
+    <form id="filter_status_form" method="get" class="btn-group-hero btn-group-toggle btn-group-lg" data-toggle="button">
+        @foreach (var status in Model.Statuses)
+        {
+            @if (status.Id != 0)
+            {
+                <a form="filter_status_form" class="btn btn-secondary btn-sm mb-1 font-weight-bold @(Model.ActiveStatusId == status.Id? "active": "")" asp-area="" asp-page="Tickets" asp-route-statusId="@status.Id">@status.Name</a>
+                <input form="form_filter" name="Filter.StatusId" type="hidden" value="@Model.ActiveStatusId" />
+            }
+            else
+            {
+                <a form="filter_status_form" class="btn btn-secondary btn-sm mb-1 font-weight-bold @(Model.ActiveStatusId == status.Id? "active": "")" asp-area="" asp-page="Tickets" asp-route-statusId="@status.Id">@status.Name</a>
+                <input form="form_filter" name="Filter.StatusId" type="hidden" value="@Model.ActiveStatusId" />
+            }
+        }
+    </form>
+    <div class="row no-gutters" style="height:calc(100vh - 180px); overflow-y:hidden;">
+        <section class="ticket-table col h-100" style="overflow-y:auto;">
+
+            <header class="table-header sticky-top bg-white" style="max-height:calc(100vh - 120px); overflow-y:auto;">
+                @(await Html.PartialAsync("_TicketHeaderPartial", Model.TicketHeader))
+            </header>
+            <div class="table-body border border-secondary mt-2 p-2">
+
+                @(await Html.PartialAsync("_TicketBodyPartial", Model.TicketBody))
+            </div>
+        </section>
+        <section class="ticket-detail collapse col-8 h-100">
+            <div class="border border-secondary ml-2 h-100">
+                <header class="d-flex justify-content-between p-3">
+                    <h4 class="mb-0">Ticket Detail</h4>
+                    <div class="btn ticket-detail-close">
+                        <span><i class="fas fa-times"></i></span>
+                    </div>
+                </header>
+                <div id="ticket_detail" class="d-flex" style="overflow:auto;">
+                    <div class="d-flex justify-content-center h-100">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

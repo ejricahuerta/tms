@@ -1,0 +1,121 @@
+﻿@using Web.Models
+@model TicketsBodyViewModel
+
+@if (Model.TicketList.Any())
+{
+    @foreach (var item in Model.TicketList)
+    {
+
+        <button role="button" class="card card-table-item bg-white rounded-0 my-1 text-left w-100" data-id="@item.Id">
+            <div class="card-body p-2 w-100">
+                <div class="d-flex w-100">
+                    <h4 class="text-primary text-uppercase mb-0">T#  @item.Id</h4>
+                    <div class="mx-2">
+                        @switch (item.StatusId)
+                        {
+                            case 1:
+                                <div class="badge badge-pill badge-warning">
+                                    @item.Status
+                                </div>
+                                break;
+                            case 2:
+                                <div class="badge badge-pill  badge-light">@item.Status</div>
+                                break;
+                            case 3:
+                                <div class="badge badge-pill badge-success">@item.Status</div>
+                                break;
+                            default:
+                                <div class="badge badge-pill badge-warning">@item.Status</div>
+                                break;
+                        }
+                    </div>
+                    <div>
+                        @switch (item.PriorityId)
+                        {
+                            case 1:
+                            case 2:
+                                <div class="badge badge-pill badge-success">
+                                    @item.Priority
+                                </div>
+                                break;
+                            case 3:
+                                <div class="badge badge-pill badge-warning">
+                                    @item.Priority
+                                </div>
+                                break;
+                            case 4:
+
+                                <div class="badge badge-pill badge-warning">
+                                    @item.Priority
+                                </div>
+                                break;
+                            case 5:
+                                <div class="badge badge-pill badge-danger">
+                                    @item.Priority
+                                </div>
+                                break;
+                            default:
+                                break;
+                        }
+                    </div>
+                    <small class="text-muted align-self-center ml-auto">@item.DateAdded</small>
+
+                </div>
+                @if (!string.IsNullOrEmpty(item.Title))
+                {
+                    <p class="text-two-liner mb-0 border-bottom">
+                        @item.Title
+                    </p>
+                }
+                <p class="text-two-liner mb-0">
+                    @item.Description
+                </p>
+                <div class="ticket-table-users">
+                    <small class="ml-auto mb-0  text-muted">Reported by: @item.ReportedBy</small>
+
+                </div>
+            </div>
+        </button>
+
+    }
+    <script>
+
+        $(function () {
+            $('.card-table-item').on('click', function () {
+                if (!$('.ticket-detail').hasClass('show')) {
+                    $('.ticket-detail').addClass('show')
+                    $('#ticket_detail').empty();
+                    $('.ticket-detail').append(loadingHtml);
+                }
+                var id = $(this).data('id');
+                console.log(id);
+                $.ajax({
+                    url: '/Tickets?handler=Detail&ticketId=' + id,
+                    type: 'GET',
+                }).done(function (result) {
+                    $('#ticket_detail').empty();
+                    $('#ticket_detail').html(result);
+                });
+            });
+
+            $('.ticket-detail-close').on('click', function () {
+                console.log('closing detail')
+                $('.ticket-detail').removeClass('show');
+                $('.ticket-detail').append(loadingHtml);
+
+
+            });
+        });
+    </script>
+}
+else
+{
+    <div class="card bg-white rounded-0 m-1">
+        <div class="card-body p-2">
+            <div class="d-flex">
+                <h5 class="text-primary text-uppercase mb-0"> No Result Found</h5>
+            </div>
+
+        </div>
+    </div>
+}

@@ -1,0 +1,180 @@
+﻿@using Core.DataTransferObjects
+@model TicketDto
+<div class="container-fluid h-100">
+    <div class="row" style="height:calc(100vh - 340px);">
+        <div class="col-md-7 col-sm-12 pb-3">
+            <div class="card bg-secondary border-0 rounded-0 h-100" style="overflow-y:auto;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <h4 class="text-primary text-uppercase mb-0">T #@(Model.Id)</h4>
+                        <div class="mx-2">
+                            @switch (Model.StatusId)
+                            {
+                                case 1:
+                                    <div class="badge badge-pill badge-warning">
+                                        @Model.Status
+                                    </div>
+                                    break;
+                                case 2:
+                                    <div class="badge badge-pill badge-warning">@Model.Status</div>
+                                    break;
+                                case 3:
+                                    <div class="badge badge-pill badge-success">@Model.Status</div>
+                                    break;
+                                default:
+                                    <div class="badge badge-pill badge-light">@Model.Status</div>
+                                    break;
+                            }
+                        </div>
+                        <div>
+                            @switch (Model.PriorityId)
+                            {
+                                case 1:
+                                case 2:
+                                    <div class="badge badge-pill badge-success">
+                                        @Model.Priority
+                                    </div>
+                                    break;
+                                case 3:
+                                    <div class="badge badge-pill badge-warning">
+                                        @Model.Priority
+                                    </div>
+                                    break;
+                                case 4:
+
+                                    <div class="badge badge-pill badge-warning">
+                                        @Model.Priority
+                                    </div>
+                                    break;
+                                case 5:
+                                    <div class="badge badge-pill badge-danger">
+                                        @Model.Priority
+                                    </div>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        </div>
+                        <button class="btn btn-link  rounded-0 ml-auto p-0" title="View Ticket Activity and History">Ticket Activity</button>
+                    </div>
+                    <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.Description"></label>
+                    <p>
+                        @Model.Description
+                    </p>
+                    @if (!string.IsNullOrEmpty(Model.Resolution))
+                    {
+                        <label class="text-muted text-uppercase mt-2 mb-0" asp-for="@Model.Resolution"></label>
+                        <p>
+                            @Model.Resolution
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 col-sm-12 h-100 pb-3 ">
+            <div class="card bg-secondary border-0 rounded-0 h-100">
+                <div class="card-body">
+                    <label class="text-muted text-uppercase mt-2 mb-0">Reported by</label>
+                    <p>@Model.ReportedBy</p>
+                    @if (Model.BelongsToId.HasValue)
+                    {
+
+                        <label class="text-muted text-uppercase mt-2 mb-0">Created by</label>
+                        <p>@Model.AssignedToUsername</p>
+                    }
+
+                    @if (Model.AssignedToId.HasValue)
+                    {
+                        <label class="text-muted text-uppercase mt-2 mb-0">Assigned to</label>
+                        <p>@Model.AssignedToUsername</p>
+                    }
+
+                    <label class="text-muted text-uppercase mt-2 mb-0">Date Created</label>
+                    <p>@Model.DateAdded</p>
+                    <label class="text-muted text-uppercase mt-2 mb-0">Date Modified</label>
+                    <p>@Model.DateModified</p>
+                    @if (!string.IsNullOrEmpty(Model.Resolution))
+                    {
+
+                        <label class="text-muted text-uppercase mt-2 mb-0">Resolve Date</label>
+                        <p>@Model.ResolveDate</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex h-100">
+        <div class="container bg-primary align-self-baseline">
+            <form class="d-flex py-2 justify-content-between">
+
+                <div class="">
+                    <button type="button" class="btn btn-sm btn-secondary border-success rounded-0 m-1 disabled" disabled><span class="text-success">Resolve</span></button>
+                    <button type="button" class="btn  btn-sm btn-secondary border-danger rounded-0 m-1 disabled" disabled><span class="text-danger">Close</span></button>
+
+                </div>
+                <div class="ml-auto">
+                    <button class="btn btn-hero rounded-0 btn-sm m-1 disabled" disabled>Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="centerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-lg rounded-0">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Center Modal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card bg-secondary border-0 rounded-0">
+                    <div class="card-body">
+                        <div class="d-flex">
+
+                        </div>
+                        <label class="text-muted text-uppercase mt-2 mb-0">Modals</label>
+                        <p>
+                            Before getting started with Bootstrap’s modal component, be sure to read the following as our menu options have recently changed.
+
+                            <ul>
+                                <li>
+                                    Modals are built with HTML, CSS, and JavaScript. They’re positioned over everything else in the document and remove scroll from the body
+                                    so that modal content scrolls instead.
+                                </li>
+                                <li>
+
+                                    Clicking on the modal “backdrop” will automatically close the modal.
+                                </li>
+                                <li>
+                                    Bootstrap only supports one modal window at a time. Nested modals aren’t supported as we believe them to be poor user experiences.
+                                </li>
+                                <li>
+                                    Modals use position: fixed, which can sometimes be a bit particular about its rendering. Whenever possible, place your modal HTML in a top-level position to avoid potential interference from other elements. You’ll likely run into issues when nesting a .modal within another fixed element.
+                                </li>
+                                <li>
+                                    Once again, due to position: fixed, there are some caveats with using modals on mobile devices. See our browser support docs for details.
+                                </li>
+                                <li>
+                                    Due to how HTML5 defines its semantics, the autofocus HTML attribute has no effect in Bootstrap modals. To achieve the same effect, use some custom JavaScript:
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid bg-white border-top border-secondary">
+                <form class="d-flex py-2 justify-content-between">
+
+                    <div class="ml-auto">
+                        <button type="button" class="btn btn-secondary rounded-0 m-1" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-hero rounded-0 btn-sm m-1">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
